@@ -1,3 +1,4 @@
+export class TypeNotFoundError extends Error { }
 export class TypeDescriptorError extends Error { }
 
 export class Int {
@@ -8,8 +9,16 @@ export class Int {
 
 export class Tuple { }
 
+export class Structure { }
+
 export class TypeLoader {
-    constructor() { }
+    constructor() {
+        this._namedTypes = Object.create(null);
+    }
+
+    registerStructure(name, structure) {
+        this._namedTypes[name] = structure;
+    }
 
     fromDescriptor(descriptor) {
         const [type, remaining] = this._fromDescriptor(descriptor);
@@ -34,6 +43,16 @@ export class TypeLoader {
                     type.elementTypes.push(elementType);
                 }
                 return [type, remaining.slice(1)];
+            }
+
+            case "N": {
+                const semicolonIndex = descriptor.indexOf(';');
+                const name = descriptor.slice(1, semicolonIndex);
+                if (!(name in this._namedTypes)) {
+                    throw new TypeNotFoundError();
+                }
+                const type = this._namedTypes[name];
+                return [type, descriptor.slice(semicolonIndex + 1)];
             }
         }
         throw new TypeDescriptorError();
