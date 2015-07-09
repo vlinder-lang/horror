@@ -46,7 +46,7 @@ export class TypeLoader {
             }
 
             case "N": {
-                const semicolonIndex = descriptor.indexOf(';');
+                const semicolonIndex = descriptor.indexOf(";");
                 const name = descriptor.slice(1, semicolonIndex);
                 if (!(name in this._namedTypes)) {
                     throw new TypeNotFoundError();
