@@ -46,13 +46,12 @@ export class TypeLoader {
             }
 
             case "N": {
-                const semicolonIndex = descriptor.indexOf(";");
-                const name = descriptor.slice(1, semicolonIndex);
+                const [name, remaining] = descriptor.slice(1).split(";");
                 if (!(name in this._namedTypes)) {
                     throw new TypeNotFoundError();
                 }
                 const type = this._namedTypes[name];
-                return [type, descriptor.slice(semicolonIndex + 1)];
+                return [type, remaining];
             }
         }
         throw new TypeDescriptorError();
