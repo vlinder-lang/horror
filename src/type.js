@@ -19,8 +19,9 @@ export class TupleType extends Type {
 }
 
 export class StructureType extends Type {
-    constructor(fields) {
+    constructor(name, fields) {
         super();
+        this.name = name;
         this.fields = fields;
         this.prototype = { type: this };
     }
@@ -31,8 +32,8 @@ export class TypeLoader {
         this._namedTypes = Object.create(null);
     }
 
-    registerStructure(name, structure) {
-        this._namedTypes[name] = structure;
+    registerNamedType(type) {
+        this._namedTypes[type.name] = type;
     }
 
     fromDescriptor(descriptor) {
