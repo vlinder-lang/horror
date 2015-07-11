@@ -14,5 +14,5 @@ internal let levelMapping = dict.make(
 )
 
 sub console(record: log.Record): () {
-    logToConsole(record^level, record^message)
+    logToConsole(dict.at(levelMapping, record^level), record^message)
 }
