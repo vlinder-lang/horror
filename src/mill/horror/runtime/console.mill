@@ -1,0 +1,18 @@
+import mill.foreign.ecmascript
+import mill.log
+import mill.dict
+import mill.text
+
+internal foreign "./console" sub ecmascript.returnCall logToConsole(level: text.String, message: text.String): ()
+
+internal let levelMapping = dict.make(
+    (log.Debug, "log"),
+    (log.Info, "info"),
+    (log.Warning, "warn"),
+    (log.Error, "error"),
+    (log.Critical, "error"),
+)
+
+sub console(record: log.Record): () {
+    logToConsole(record^level, record^message)
+}
