@@ -1,0 +1,6 @@
+import mill.dict
+import mill.horror.runtime.console
+
+let mainArguments = dict.make(
+    ("console", console.console),
+)
