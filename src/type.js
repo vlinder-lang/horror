@@ -1,13 +1,19 @@
 export class TypeNotFoundError extends Error { }
 export class TypeDescriptorError extends Error { }
 
-export class Type { }
+export class Type {
+    get descriptor() {
+        throw Error("not implemented");
+    }
+}
 
 export const stringType = new class extends Type {
     constructor() {
         super();
         this.prototype = { type: this };
     }
+
+    get descriptor() { return "S"; }
 };
 
 export class TupleType extends Type {
@@ -16,6 +22,10 @@ export class TupleType extends Type {
         this.elementTypes = elementTypes;
         this.prototype = { type: this };
     }
+
+    get descriptor() {
+        return "T" + this.elementTypes.map(t => t.descriptor).join("") + ";";
+    }
 }
 
 export class SubType extends Type {
@@ -23,6 +33,14 @@ export class SubType extends Type {
         super();
         this.parameterTypes = parameterTypes;
         this.returnType = returnType;
+        this.prototype = { type: this };
+    }
+
+    get descriptor() {
+        return "F"
+             + this.parameterTypes.map(t => t.descriptor).join("")
+             + this.returnType.descriptor
+             + ";";
     }
 }
 
@@ -33,6 +51,8 @@ export class StructType extends Type {
         this.fields = fields;
         this.prototype = { type: this };
     }
+
+    get descriptor() { return "N" + this.name + ";" }
 }
 
 StructType.Field = class {
@@ -48,6 +68,8 @@ export class UnionType extends Type {
         this.name = name;
         this.constructors = constructors;
     }
+
+    get descriptor() { return "N" + this.name + ";" }
 }
 
 UnionType.Constructor = class {

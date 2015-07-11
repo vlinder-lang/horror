@@ -6,8 +6,9 @@ export function testModuleLoaderLoadModule(test) {
     const fetcher = name => {
         return fs.readFileSync(__dirname + "/testdata/" + name.replace(/\./g, "/") + ".millm", "utf-8");
     };
+    const globalMap = new module.GlobalMap();
     const typeLoader = new type.TypeLoader();
-    const moduleLoader = new module.ModuleLoader(fetcher, typeLoader);
+    const moduleLoader = new module.ModuleLoader(fetcher, globalMap, typeLoader);
 
     moduleLoader.loadModule("mill.log");
     test.ok(moduleLoader._loadedModuleNames["mill.log"]);
@@ -40,6 +41,13 @@ export function testModuleLoaderLoadModule(test) {
     test.strictEqual(loggerType.parameterTypes.length, 1);
     test.strictEqual(loggerType.parameterTypes[0], recordType);
     test.ok(loggerType.returnType instanceof type.TupleType);
+
+    const infoSub = globalMap.givenName("mill.log.info");
+    test.ok(infoSub.type instanceof type.SubType);
+    test.strictEqual(infoSub.type.descriptor, "FFNmill.log.Record;T;;ST;;");
+    test.strictEqual(infoSub.name, "mill.log.info");
+    test.deepEqual(infoSub.parameterNames, ["logger", "message"]);
+    test.strictEqual(infoSub.localCount, 0);
 
     test.done();
 }
