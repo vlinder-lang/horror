@@ -2,6 +2,7 @@
   "name": "horror",
   "dependencies": {
     "babel": "^5.6.14",
+    "js-yaml": "^3.3.1",
     "nodeunit": "^0.9.1"
   }
 }

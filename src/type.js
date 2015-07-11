@@ -1,13 +1,19 @@
 export class TypeNotFoundError extends Error { }
 export class TypeDescriptorError extends Error { }
 
-export class Type { }
+export class Type {
+    get descriptor() {
+        throw Error("not implemented");
+    }
+}
 
 export const stringType = new class extends Type {
     constructor() {
         super();
         this.prototype = { type: this };
     }
+
+    get descriptor() { return "S"; }
 };
 
 export class TupleType extends Type {
@@ -15,6 +21,26 @@ export class TupleType extends Type {
         super();
         this.elementTypes = elementTypes;
         this.prototype = { type: this };
+    }
+
+    get descriptor() {
+        return "T" + this.elementTypes.map(t => t.descriptor).join("") + ";";
+    }
+}
+
+export class SubType extends Type {
+    constructor(parameterTypes, returnType) {
+        super();
+        this.parameterTypes = parameterTypes;
+        this.returnType = returnType;
+        this.prototype = { type: this };
+    }
+
+    get descriptor() {
+        return "F"
+             + this.parameterTypes.map(t => t.descriptor).join("")
+             + this.returnType.descriptor
+             + ";";
     }
 }
 
@@ -25,15 +51,51 @@ export class StructType extends Type {
         this.fields = fields;
         this.prototype = { type: this };
     }
+
+    get descriptor() { return "N" + this.name + ";" }
 }
+
+StructType.Field = class {
+    constructor(name, typeDescriptor) {
+        this.name = name;
+        this.typeDescriptor = typeDescriptor;
+    }
+};
+
+export class UnionType extends Type {
+    constructor(name, constructors) {
+        super();
+        this.name = name;
+        this.constructors = constructors;
+    }
+
+    get descriptor() { return "N" + this.name + ";" }
+}
+
+UnionType.Constructor = class {
+    constructor(name, parameters) {
+        this.name = name;
+        this.parameters = parameters;
+    }
+};
+
+UnionType.Constructor.Parameter = class {
+    constructor(name, typeDescriptor) {
+        this.name = name;
+        this.typeDescriptor = typeDescriptor;
+    }
+};
 
 export class TypeLoader {
     constructor() {
         this._namedTypes = Object.create(null);
     }
 
-    registerNamedType(type) {
-        this._namedTypes[type.name] = type;
+    registerNamedType(name, type) {
+        if (name in this._namedTypes) {
+            throw Error("type already registered");
+        }
+        this._namedTypes[name] = type;
     }
 
     fromDescriptor(descriptor) {
@@ -57,6 +119,23 @@ export class TypeLoader {
                     elementTypes.push(elementType);
                 }
                 const type = new TupleType(elementTypes);
+                return [type, remaining.slice(1)];
+            }
+
+            case "F": {
+                const types = [];
+                let remaining = descriptor.slice(1);
+                while (remaining[0] !== ";") {
+                    let type;
+                    [type, remaining] = this._fromDescriptor(remaining);
+                    types.push(type);
+                }
+                if (types.length < 1) {
+                    throw new TypeDescriptorError();
+                }
+                const parameterTypes = types.slice(0, types.length - 1);
+                const returnType = types[types.length - 1];
+                const type = new SubType(parameterTypes, returnType);
                 return [type, remaining.slice(1)];
             }
 
