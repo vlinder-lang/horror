@@ -18,7 +18,7 @@ export class TupleType extends Type {
     }
 }
 
-export class StructureType extends Type {
+export class StructType extends Type {
     constructor(name, fields) {
         super();
         this.name = name;

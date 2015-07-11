@@ -3,7 +3,7 @@ import * as type from "../src/type";
 export function testTypeLoaderFromDescriptor(test) {
     const typeLoader = new type.TypeLoader();
 
-    const recordType = new type.StructureType("mill.log.Record", []);
+    const recordType = new type.StructType("mill.log.Record", []);
     typeLoader.registerNamedType(recordType);
 
     {
