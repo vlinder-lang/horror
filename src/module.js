@@ -42,9 +42,18 @@ export class ModuleLoader {
         if (yaml.name !== name) {
             throw Error("bad module name");
         }
+        for (let phase of ["imports", "structs", "unions", "aliases", "subs"]) {
+            this["_load" + phase[0].toUpperCase() + phase.slice(1) + "FromYAML"](name, yaml);
+        }
+    }
+
+    _loadImportsFromYAML(name, yaml) {
         for (let yamlImport of yaml.imports) {
             this.loadModule(yamlImport);
         }
+    }
+
+    _loadStructsFromYAML(name, yaml) {
         for (let yamlStruct of yaml.structs) {
             const fields = yamlStruct.fields.map(yamlField => {
                 return new type.StructType.Field(yamlField.name, yamlField.type);
@@ -52,6 +61,9 @@ export class ModuleLoader {
             const struct = new type.StructType(name + "." + yamlStruct.name, fields);
             this._typeLoader.registerNamedType(struct.name, struct);
         }
+    }
+
+    _loadUnionsFromYAML(name, yaml) {
         for (let yamlUnion of yaml.unions) {
             const constructors = yamlUnion.constructors.map(yamlConstructor => {
                 const parameters = yamlConstructor.parameters.map(yamlParameter => {
@@ -62,10 +74,16 @@ export class ModuleLoader {
             const union = new type.UnionType(name + "." + yamlUnion.name, constructors);
             this._typeLoader.registerNamedType(union.name, union);
         }
+    }
+
+    _loadAliasesFromYAML(name, yaml) {
         for (let yamlAlias of yaml.aliases) {
             const type = this._typeLoader.fromDescriptor(yamlAlias.type);
             this._typeLoader.registerNamedType(name + "." + yamlAlias.name, type);
         }
+    }
+
+    _loadSubsFromYAML(name, yaml) {
         for (let yamlSub of yaml.subs) {
             let subTypeDescriptor = "F";
             for (let yamlParameter of yamlSub.parameters) {
