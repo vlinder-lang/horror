@@ -1,0 +1,36 @@
+# 0.0.1
+name: mill.log
+imports: [mill.text]
+unions:
+  - name: Level
+    constructors:
+      - { name: Debug, parameters: [] }
+      - { name: Info, parameters: [] }
+      - { name: Warning, parameters: [] }
+      - { name: Error, parameters: [] }
+      - { name: Critical, parameters: [] }
+structs:
+  - name: Record
+    fields:
+      - { name: level, type: 'Nmill.log.Level;' }
+      - { name: message, type: S }
+aliases:
+  - { name: Logger, type: 'FNmill.log.Record;T;;' }
+subs:
+  - name: info
+    parameters:
+      - { name: logger, type: 'Nmill.log.Logger;' }
+      - { name: message, type: 'S' }
+    returnType: 'T;'
+    localCount: 0
+    body:
+      - { opcode: ldarg, argument: 0 }
+      - { opcode: new, type: 'Nmill.log.Record;' }
+      - { opcode: dup }
+      - { opcode: dup }
+      - { opcode: ldctor, type: 'Nmill.log.Level;', ctor: Info }
+      - { opcode: stfld, type: 'Nmill.log.Record;', field: level }
+      - { opcode: ldarg, argument: 1 }
+      - { opcode: stfld, type: 'Nmill.log.Record;', field: message }
+      - { opcode: call, arguments: 1 }
+      - { opcode: ret }

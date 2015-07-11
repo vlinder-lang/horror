@@ -4,7 +4,7 @@ export function testTypeLoaderFromDescriptor(test) {
     const typeLoader = new type.TypeLoader();
 
     const recordType = new type.StructType("mill.log.Record", []);
-    typeLoader.registerNamedType(recordType);
+    typeLoader.registerNamedType("mill.log.Record", recordType);
 
     {
         const stringType = typeLoader.fromDescriptor("S");

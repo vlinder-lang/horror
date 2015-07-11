@@ -1,0 +1,8 @@
+# 0.0.1
+name: mill.text
+imports: []
+unions: []
+structs: []
+aliases:
+  - { name: String, type: S }
+subs: []
