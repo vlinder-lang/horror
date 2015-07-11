@@ -1,5 +1,13 @@
 <package>
     <namespace>mill</namespace>
-    <name>horror</name>
+    <name>log</name>
     <version>0.0.1</version>
+
+    <dependencies>
+        <dependency>
+            <namespace>mill</namespace>
+            <name>log</name>
+            <version>0.0.*</version>
+        </dependency>
+    </dependencies>
 </package>
