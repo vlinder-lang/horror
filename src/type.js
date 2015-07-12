@@ -13,6 +13,12 @@ export const stringType = new class extends Type {
         this.prototype = { type: this };
     }
 
+    new(value) {
+        const string = Object.create(this.prototype);
+        string.value = value;
+        return string;
+    }
+
     get descriptor() { return "S"; }
 };
 
@@ -31,6 +37,10 @@ export class TupleType extends Type {
         };
     }
 
+    new() {
+        return Object.create(this.prototype);
+    }
+
     get descriptor() {
         return "T" + this.elementTypes.map(t => t.descriptor).join("") + ";";
     }
@@ -42,6 +52,15 @@ export class SubType extends Type {
         this.parameterTypes = parameterTypes;
         this.returnType = returnType;
         this.prototype = { type: this };
+    }
+
+    new(name, parameterNames, localCount, body) {
+        const sub = Object.create(this.prototype);
+        sub.name = name;
+        sub.parameterNames = parameterNames;
+        sub.localCount = localCount;
+        sub.body = body;
+        return sub;
     }
 
     get descriptor() {
@@ -66,6 +85,10 @@ export class StructType extends Type {
                 this["__" + field] = value;
             },
         };
+    }
+
+    new() {
+        return Object.create(this.prototype);
     }
 
     get descriptor() { return "N" + this.name + ";" }

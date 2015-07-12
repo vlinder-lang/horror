@@ -97,11 +97,12 @@ export class ModuleLoader {
             subTypeDescriptor += ";";
             const subType = this._typeLoader.fromDescriptor(subTypeDescriptor);
 
-            const sub = Object.create(subType.prototype);
-            sub.name = name + "." + yamlSub.name;
-            sub.parameterNames = yamlSub.parameters.map(p => p.name);
-            sub.localCount = yamlSub.localCount;
-            sub.body = yamlSub.body;
+            const sub = subType.new(
+                name + "." + yamlSub.name,
+                yamlSub.parameters.map(p => p.name),
+                yamlSub.localCount,
+                yamlSub.body
+            );
             this._globalMap.registerGlobal(sub.name, sub);
         }
     }
