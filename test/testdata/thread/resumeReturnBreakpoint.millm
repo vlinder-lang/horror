@@ -1,0 +1,15 @@
+# 0.0.1
+name: thread.resumeReturnBreakpoint
+imports: []
+unions: []
+structs: []
+aliases: []
+subs:
+  - name: main
+    parameters: []
+    returnType: 'T;'
+    localCount: 0
+    body:
+      - { opcode: brk }
+      - { opcode: new, type: 'T;' }
+      - { opcode: ret }

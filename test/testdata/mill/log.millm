@@ -28,7 +28,7 @@ subs:
       - { opcode: new, type: 'Nmill.log.Record;' }
       - { opcode: dup }
       - { opcode: dup }
-      - { opcode: ldctor, type: 'Nmill.log.Level;', ctor: Info }
+      - { opcode: ldctor, type: 'Nmill.log.Level;', constructor: Info }
       - { opcode: stfld, type: 'Nmill.log.Record;', field: level }
       - { opcode: ldarg, argument: 1 }
       - { opcode: stfld, type: 'Nmill.log.Record;', field: message }
