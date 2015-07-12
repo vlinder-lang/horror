@@ -30,3 +30,13 @@ export function testThreadResumeReturnBreakpoint(test) {
     test.strictEqual(status, thread.Thread.Status.BREAKPOINT);
     test.done();
 }
+
+export function testThreadDup(test) {
+    this.moduleLoader.loadModule("thread.resumeDup");
+    const sub = this.globalMap.givenName("thread.resumeDup.main");
+    const thr = new thread.Thread(this.typeLoader, sub, []);
+    thr.resume();
+    test.strictEqual(thr.evaluationStack.length, 2);
+    test.strictEqual(thr.evaluationStack[0], thr.evaluationStack[1]);
+    test.done();
+}
