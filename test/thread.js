@@ -100,6 +100,24 @@ export function testThreadNew(test) {
     test.done();
 }
 
+export function testThreadPop(test) {
+    this.moduleLoader.loadModule("thread.pop");
+    const sub = this.globalMap.givenName("thread.pop.main");
+    const thr = new thread.Thread(this.globalMap, this.typeLoader, sub, []);
+    thr.resume();
+    test.strictEqual(thr.evaluationStack.length, 0);
+    test.done();
+}
+
+export function testThreadRet(test) {
+    this.moduleLoader.loadModule("thread.ret");
+    const sub = this.globalMap.givenName("thread.ret.main");
+    const thr = new thread.Thread(this.globalMap, this.typeLoader, sub, []);
+    const status = thr.resume();
+    test.strictEqual(status, thread.Thread.Status.FINISHED);
+    test.done();
+}
+
 export function testThreadStflt(test) {
     this.moduleLoader.loadModule("thread.stfld");
     const sub = this.globalMap.givenName("thread.stfld.main");
@@ -110,15 +128,6 @@ export function testThreadStflt(test) {
     test.strictEqual(thr.evaluationStack[0].__0.type.descriptor, "T;");
     test.strictEqual(thr.evaluationStack[0].__1.type.descriptor, "T;");
     test.strictEqual(thr.evaluationStack[0].__2.type.descriptor, "T;");
-    test.done();
-}
-
-export function testThreadRet(test) {
-    this.moduleLoader.loadModule("thread.ret");
-    const sub = this.globalMap.givenName("thread.ret.main");
-    const thr = new thread.Thread(this.globalMap, this.typeLoader, sub, []);
-    const status = thr.resume();
-    test.strictEqual(status, thread.Thread.Status.FINISHED);
     test.done();
 }
 

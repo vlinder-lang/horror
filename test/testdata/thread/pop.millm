@@ -1,0 +1,18 @@
+# 0.0.1
+name: thread.pop
+imports: []
+unions: []
+structs: []
+aliases: []
+subs:
+  - name: main
+    parameters: []
+    returnType: 'T;'
+    localCount: 0
+    body:
+      - { opcode: new, type: 'T;' }
+      - { opcode: pop }
+      - { opcode: brk }
+      - { opcode: new, type: 'T;' }
+      - { opcode: ret }
+foreignSubs: []
