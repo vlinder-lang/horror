@@ -84,6 +84,16 @@ export function testThreadLdgbl(test) {
     test.done();
 }
 
+export function testThreadNew(test) {
+    this.moduleLoader.loadModule("thread.new");
+    const sub = this.globalMap.givenName("thread.new.main");
+    const thr = new thread.Thread(this.globalMap, this.typeLoader, sub);
+    thr.resume();
+    test.strictEqual(thr.evaluationStack.length, 1);
+    test.strictEqual(thr.evaluationStack[0].type.descriptor, "T;");
+    test.done();
+}
+
 export function testThreadRet(test) {
     this.moduleLoader.loadModule("thread.ret");
     const sub = this.globalMap.givenName("thread.ret.main");
