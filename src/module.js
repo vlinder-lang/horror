@@ -65,12 +65,15 @@ export class ModuleLoader {
 
     _loadUnionsFromYAML(name, yaml) {
         for (let yamlUnion of yaml.unions) {
-            const constructors = yamlUnion.constructors.map(yamlConstructor => {
-                const parameters = yamlConstructor.parameters.map(yamlParameter => {
-                    return new type.UnionType.Constructor.Parameter(yamlParameter.name, yamlParameter.type);
-                });
-                return new type.UnionType.Constructor(yamlConstructor.name, parameters);
-            });
+            const constructors = self => {
+                const result = Object.create(null);
+                for (let yamlConstructor of yamlUnion.constructors) {
+                    const constructor = Object.create(self.prototype);
+                    constructor.name = yamlConstructor.name;
+                    result[yamlConstructor.name] = constructor;
+                }
+                return result;
+            };
             const union = new type.UnionType(name + "." + yamlUnion.name, constructors);
             this._typeLoader.registerNamedType(union.name, union);
         }

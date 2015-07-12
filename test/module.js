@@ -18,14 +18,13 @@ export function testModuleLoaderLoadModule(test) {
 
     const levelType = typeLoader.fromDescriptor("Nmill.log.Level;");
     test.ok(levelType instanceof type.UnionType);
-    test.strictEqual(levelType.constructors.length, 5);
-    test.strictEqual(levelType.constructors[0].name, 'Debug');
-    test.strictEqual(levelType.constructors[1].name, 'Info');
-    test.strictEqual(levelType.constructors[2].name, 'Warning');
-    test.strictEqual(levelType.constructors[3].name, 'Error');
-    test.strictEqual(levelType.constructors[4].name, 'Critical');
-    for (let constructor of levelType.constructors) {
-        test.strictEqual(constructor.parameters.length, 0);
+    test.strictEqual(levelType.constructors['Debug'].name, 'Debug');
+    test.strictEqual(levelType.constructors['Info'].name, 'Info');
+    test.strictEqual(levelType.constructors['Warning'].name, 'Warning');
+    test.strictEqual(levelType.constructors['Error'].name, 'Error');
+    test.strictEqual(levelType.constructors['Critical'].name, 'Critical');
+    for (let constructor in levelType.constructors) {
+        test.strictEqual(levelType.constructors[constructor].type, levelType);
     }
 
     const recordType = typeLoader.fromDescriptor("Nmill.log.Record;");

@@ -66,25 +66,12 @@ export class UnionType extends Type {
     constructor(name, constructors) {
         super();
         this.name = name;
-        this.constructors = constructors;
+        this.prototype = { type: this };
+        this.constructors = constructors(this);
     }
 
     get descriptor() { return "N" + this.name + ";" }
 }
-
-UnionType.Constructor = class {
-    constructor(name, parameters) {
-        this.name = name;
-        this.parameters = parameters;
-    }
-};
-
-UnionType.Constructor.Parameter = class {
-    constructor(name, typeDescriptor) {
-        this.name = name;
-        this.typeDescriptor = typeDescriptor;
-    }
-};
 
 export class TypeLoader {
     constructor() {

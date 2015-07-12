@@ -1,0 +1,26 @@
+# 0.0.1
+name: thread.ldctor
+imports: []
+unions:
+  - name: Level
+    constructors:
+      - { name: Debug, parameters: [] }
+      - { name: Info, parameters: [] }
+      - { name: Warning, parameters: [] }
+      - { name: Error, parameters: [] }
+      - { name: Critical, parameters: [] }
+structs: []
+aliases: []
+subs:
+  - name: main
+    parameters: []
+    returnType: 'T;'
+    localCount: 0
+    body:
+      - { opcode: ldctor, type: 'Nthread.ldctor.Level;', constructor: Debug }
+      - { opcode: ldctor, type: 'Nthread.ldctor.Level;', constructor: Info }
+      - { opcode: ldctor, type: 'Nthread.ldctor.Level;', constructor: Warning }
+      - { opcode: ldctor, type: 'Nthread.ldctor.Level;', constructor: Error }
+      - { opcode: ldctor, type: 'Nthread.ldctor.Level;', constructor: Critical }
+      - { opcode: brk }
+      - { opcode: ret }
