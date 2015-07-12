@@ -1,0 +1,18 @@
+# 0.0.1
+name: thread.dup
+imports: []
+unions: []
+structs: []
+aliases: []
+subs:
+  - name: main
+    parameters: []
+    returnType: 'T;'
+    localCount: 0
+    body:
+      - { opcode: new, type: 'T;' }
+      - { opcode: dup }
+      - { opcode: brk }
+      - { opcode: new, type: 'T;' }
+      - { opcode: ret }
+foreignSubs: []

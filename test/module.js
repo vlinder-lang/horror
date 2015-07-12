@@ -3,12 +3,15 @@ import * as type from "../src/type";
 import * as fs from "fs";
 
 export function testModuleLoaderLoadModule(test) {
-    const fetcher = name => {
+    const millModuleFetcher = name => {
         return fs.readFileSync(__dirname + "/testdata/" + name.replace(/\./g, "/") + ".millm", "utf-8");
+    };
+    const ecmascriptModuleFetcher = name => {
+        return require(__dirname + "/testdata/" + name.replace(/\./g, "/"));
     };
     const globalMap = new module.GlobalMap();
     const typeLoader = new type.TypeLoader();
-    const moduleLoader = new module.ModuleLoader(fetcher, globalMap, typeLoader);
+    const moduleLoader = new module.ModuleLoader(millModuleFetcher, ecmascriptModuleFetcher, globalMap, typeLoader);
 
     moduleLoader.loadModule("mill.log");
     test.ok(moduleLoader._loadedModuleNames["mill.log"]);
@@ -18,14 +21,13 @@ export function testModuleLoaderLoadModule(test) {
 
     const levelType = typeLoader.fromDescriptor("Nmill.log.Level;");
     test.ok(levelType instanceof type.UnionType);
-    test.strictEqual(levelType.constructors.length, 5);
-    test.strictEqual(levelType.constructors[0].name, 'Debug');
-    test.strictEqual(levelType.constructors[1].name, 'Info');
-    test.strictEqual(levelType.constructors[2].name, 'Warning');
-    test.strictEqual(levelType.constructors[3].name, 'Error');
-    test.strictEqual(levelType.constructors[4].name, 'Critical');
-    for (let constructor of levelType.constructors) {
-        test.strictEqual(constructor.parameters.length, 0);
+    test.strictEqual(levelType.constructors['Debug'].name, 'Debug');
+    test.strictEqual(levelType.constructors['Info'].name, 'Info');
+    test.strictEqual(levelType.constructors['Warning'].name, 'Warning');
+    test.strictEqual(levelType.constructors['Error'].name, 'Error');
+    test.strictEqual(levelType.constructors['Critical'].name, 'Critical');
+    for (let constructor in levelType.constructors) {
+        test.strictEqual(levelType.constructors[constructor].type, levelType);
     }
 
     const recordType = typeLoader.fromDescriptor("Nmill.log.Record;");
@@ -48,6 +50,14 @@ export function testModuleLoaderLoadModule(test) {
     test.strictEqual(infoSub.name, "mill.log.info");
     test.deepEqual(infoSub.parameterNames, ["logger", "message"]);
     test.strictEqual(infoSub.localCount, 0);
+
+    moduleLoader.loadModule("mill.ffi");
+    const idWithSideEffectLOLSub = globalMap.givenName("mill.ffi.idWithSideEffectLOL");
+    test.ok(idWithSideEffectLOLSub.type instanceof type.SubType);
+    test.strictEqual(idWithSideEffectLOLSub.type.descriptor, "FT;T;;");
+    test.strictEqual(idWithSideEffectLOLSub.name, "mill.ffi.idWithSideEffectLOL");
+    test.deepEqual(idWithSideEffectLOLSub.parameterNames, ["y"]);
+    test.strictEqual(idWithSideEffectLOLSub.localCount, 0);
 
     test.done();
 }

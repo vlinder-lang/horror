@@ -13,6 +13,12 @@ export const stringType = new class extends Type {
         this.prototype = { type: this };
     }
 
+    new(value) {
+        const string = Object.create(this.prototype);
+        string.value = value;
+        return string;
+    }
+
     get descriptor() { return "S"; }
 };
 
@@ -20,7 +26,19 @@ export class TupleType extends Type {
     constructor(elementTypes) {
         super();
         this.elementTypes = elementTypes;
-        this.prototype = { type: this };
+        this.prototype = {
+            type: this,
+            getField: function(field) {
+                return this["__" + field];
+            },
+            setField: function(field, value) {
+                this["__" + field] = value;
+            },
+        };
+    }
+
+    new() {
+        return Object.create(this.prototype);
     }
 
     get descriptor() {
@@ -36,6 +54,15 @@ export class SubType extends Type {
         this.prototype = { type: this };
     }
 
+    new(name, parameterNames, localCount, body) {
+        const sub = Object.create(this.prototype);
+        sub.name = name;
+        sub.parameterNames = parameterNames;
+        sub.localCount = localCount;
+        sub.body = body;
+        return sub;
+    }
+
     get descriptor() {
         return "F"
              + this.parameterTypes.map(t => t.descriptor).join("")
@@ -49,7 +76,19 @@ export class StructType extends Type {
         super();
         this.name = name;
         this.fields = fields;
-        this.prototype = { type: this };
+        this.prototype = {
+            type: this,
+            getField: function(field) {
+                return this["__" + field];
+            },
+            setField: function(field, value) {
+                this["__" + field] = value;
+            },
+        };
+    }
+
+    new() {
+        return Object.create(this.prototype);
     }
 
     get descriptor() { return "N" + this.name + ";" }
@@ -66,25 +105,12 @@ export class UnionType extends Type {
     constructor(name, constructors) {
         super();
         this.name = name;
-        this.constructors = constructors;
+        this.prototype = { type: this };
+        this.constructors = constructors(this);
     }
 
     get descriptor() { return "N" + this.name + ";" }
 }
-
-UnionType.Constructor = class {
-    constructor(name, parameters) {
-        this.name = name;
-        this.parameters = parameters;
-    }
-};
-
-UnionType.Constructor.Parameter = class {
-    constructor(name, typeDescriptor) {
-        this.name = name;
-        this.typeDescriptor = typeDescriptor;
-    }
-};
 
 export class TypeLoader {
     constructor() {

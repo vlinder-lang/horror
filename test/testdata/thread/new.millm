@@ -1,0 +1,16 @@
+# 0.0.1
+name: thread.new
+imports: []
+unions: []
+structs: []
+aliases: []
+subs:
+  - name: main
+    parameters: []
+    returnType: 'T;'
+    localCount: 0
+    body:
+      - { opcode: new, type: 'T;' }
+      - { opcode: brk }
+      - { opcode: ret }
+foreignSubs: []

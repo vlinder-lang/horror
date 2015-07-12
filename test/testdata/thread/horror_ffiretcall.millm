@@ -1,0 +1,24 @@
+# 0.0.1
+name: thread.horror_ffiretcall
+imports: []
+unions: []
+structs: []
+aliases: []
+subs:
+  - name: main
+    parameters: []
+    returnType: 'T;'
+    localCount: 0
+    body:
+      - { opcode: ldgbl, name: thread.horror_ffiretcall.idWithSideEffectLOL }
+      - { opcode: new, type: 'T;' }
+      - { opcode: call, arguments: 1 }
+      - { opcode: brk }
+      - { opcode: ret }
+foreignSubs:
+  - library: 'mill/ffi'
+    callingConvention: returnCall
+    name: idWithSideEffectLOL
+    parameters:
+      - { name: y, type: 'T;' }
+    returnType: 'T;'

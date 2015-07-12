@@ -1,21 +1,9 @@
 # 0.0.1
-name: mill.log
-imports: [mill.text]
-unions:
-  - name: Level
-    constructors:
-      - { name: Debug, parameters: [] }
-      - { name: Info, parameters: [] }
-      - { name: Warning, parameters: [] }
-      - { name: Error, parameters: [] }
-      - { name: Critical, parameters: [] }
-structs:
-  - name: Record
-    fields:
-      - { name: level, type: 'Nmill.log.Level;' }
-      - { name: message, type: S }
-aliases:
-  - { name: Logger, type: 'FNmill.log.Record;T;;' }
+name: mill.ffi
+imports: []
+unions: []
+structs: []
+aliases: []
 subs:
   - name: info
     parameters:
@@ -34,4 +22,10 @@ subs:
       - { opcode: stfld, type: 'Nmill.log.Record;', field: message }
       - { opcode: call, arguments: 1 }
       - { opcode: ret }
-foreignSubs: []
+foreignSubs:
+  - library: 'mill/ffi'
+    callingConvention: returnCall
+    name: idWithSideEffectLOL
+    parameters:
+      - { name: y, type: 'T;' }
+    returnType: 'T;'

@@ -1,0 +1,28 @@
+# 0.0.1
+name: thread.call
+imports: []
+unions: []
+structs: []
+aliases: []
+subs:
+  - name: main
+    parameters: []
+    returnType: 'T;'
+    localCount: 0
+    body:
+      - { opcode: ldgbl, name: thread.call.sub }
+      - { opcode: new, type: 'T;' }
+      - { opcode: call, arguments: 1 }
+      - { opcode: brk }
+      - { opcode: ret }
+  - name: sub
+    parameters:
+      - name: param
+        type: 'T;'
+    returnType: 'T;'
+    localCount: 0
+    body:
+      - { opcode: ldarg, argument: 0 }
+      - { opcode: brk }
+      - { opcode: ret }
+foreignSubs: []
