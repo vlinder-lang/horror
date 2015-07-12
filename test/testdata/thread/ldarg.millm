@@ -1,0 +1,16 @@
+# 0.0.1
+name: thread.ldarg
+imports: []
+unions: []
+structs: []
+aliases: []
+subs:
+  - name: main
+    parameters:
+      - { name: param, type: 'T;' }
+    returnType: 'T;'
+    localCount: 0
+    body:
+      - { opcode: ldarg, argument: 0 }
+      - { opcode: brk }
+      - { opcode: ret }

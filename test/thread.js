@@ -50,6 +50,17 @@ export function testThreadDup(test) {
     test.done();
 }
 
+export function testThreadLdarg(test) {
+    this.moduleLoader.loadModule("thread.ldarg");
+    const sub = this.globalMap.givenName("thread.ldarg.main");
+    const args = [Object.create(this.typeLoader.fromDescriptor('T;').prototype)];
+    const thr = new thread.Thread(this.globalMap, this.typeLoader, sub, args);
+    thr.resume();
+    test.strictEqual(thr.evaluationStack.length, 1);
+    test.strictEqual(thr.evaluationStack[0].type.descriptor, 'T;');
+    test.done();
+}
+
 export function testThreadRet(test) {
     this.moduleLoader.loadModule("thread.ret");
     const sub = this.globalMap.givenName("thread.ret.main");
