@@ -1,7 +1,8 @@
 export class InstructionError extends Error { }
 
 export class Thread {
-    constructor(typeLoader, sub, args) {
+    constructor(globalMap, typeLoader, sub, args) {
+        this._globalMap = globalMap;
         this._typeLoader = typeLoader;
         this.evaluationStack = [];
         this.callStack = [new Thread.StackFrame(sub, args)];
@@ -12,6 +13,7 @@ export class Thread {
             const instruction = this._instruction();
             switch (instruction.opcode) {
                 case "brk":
+                    this._relativeJump(1);
                     return Thread.Status.BREAKPOINT;
 
                 case "call": {
@@ -43,6 +45,13 @@ export class Thread {
                 case "ldctor": {
                     const type = this._typeLoader.fromDescriptor(instruction.type);
                     const value = type.constructors[instruction.constructor];
+                    this._push(value);
+                    this._relativeJump(1);
+                    break;
+                }
+
+                case "ldgbl": {
+                    const value = this._globalMap.givenName(instruction.name);
                     this._push(value);
                     this._relativeJump(1);
                     break;

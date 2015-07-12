@@ -1,5 +1,5 @@
 # 0.0.1
-name: thread.resumeDup
+name: thread.ret
 imports: []
 unions: []
 structs: []
@@ -10,8 +10,5 @@ subs:
     returnType: 'T;'
     localCount: 0
     body:
-      - { opcode: new, type: 'T;' }
-      - { opcode: dup }
-      - { opcode: brk }
       - { opcode: new, type: 'T;' }
       - { opcode: ret }

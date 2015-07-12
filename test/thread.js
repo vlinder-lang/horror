@@ -13,30 +13,48 @@ export function setUp(callback) {
     callback();
 }
 
-export function testThreadResumeReturnFinished(test) {
-    this.moduleLoader.loadModule("thread.resumeReturnFinished");
-    const sub = this.globalMap.givenName("thread.resumeReturnFinished.main");
-    const thr = new thread.Thread(this.typeLoader, sub, []);
-    const status = thr.resume();
-    test.strictEqual(status, thread.Thread.Status.FINISHED);
-    test.done();
-}
-
-export function testThreadResumeReturnBreakpoint(test) {
-    this.moduleLoader.loadModule("thread.resumeReturnBreakpoint");
-    const sub = this.globalMap.givenName("thread.resumeReturnBreakpoint.main");
-    const thr = new thread.Thread(this.typeLoader, sub, []);
+export function testThreadBrk(test) {
+    this.moduleLoader.loadModule("thread.brk");
+    const sub = this.globalMap.givenName("thread.brk.main");
+    const thr = new thread.Thread(this.globalMap, this.typeLoader, sub, []);
     const status = thr.resume();
     test.strictEqual(status, thread.Thread.Status.BREAKPOINT);
     test.done();
 }
 
+export function testThreadCall(test) {
+    this.moduleLoader.loadModule("thread.call");
+    const sub = this.globalMap.givenName("thread.call.main");
+    const thr = new thread.Thread(this.globalMap, this.typeLoader, sub, []);
+
+    thr.resume();
+    test.strictEqual(thr.callStack.length, 2);
+    test.strictEqual(thr.evaluationStack.length, 1);
+    test.strictEqual(thr.evaluationStack[0].type.descriptor, "T;");
+
+    thr.resume();
+    test.strictEqual(thr.callStack.length, 1);
+    test.strictEqual(thr.evaluationStack.length, 1);
+    test.strictEqual(thr.evaluationStack[0].type.descriptor, "T;");
+
+    test.done();
+}
+
 export function testThreadDup(test) {
-    this.moduleLoader.loadModule("thread.resumeDup");
-    const sub = this.globalMap.givenName("thread.resumeDup.main");
-    const thr = new thread.Thread(this.typeLoader, sub, []);
+    this.moduleLoader.loadModule("thread.dup");
+    const sub = this.globalMap.givenName("thread.dup.main");
+    const thr = new thread.Thread(this.globalMap, this.typeLoader, sub, []);
     thr.resume();
     test.strictEqual(thr.evaluationStack.length, 2);
     test.strictEqual(thr.evaluationStack[0], thr.evaluationStack[1]);
+    test.done();
+}
+
+export function testThreadRet(test) {
+    this.moduleLoader.loadModule("thread.ret");
+    const sub = this.globalMap.givenName("thread.ret.main");
+    const thr = new thread.Thread(this.globalMap, this.typeLoader, sub, []);
+    const status = thr.resume();
+    test.strictEqual(status, thread.Thread.Status.FINISHED);
     test.done();
 }
