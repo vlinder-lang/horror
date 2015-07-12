@@ -79,6 +79,16 @@ export function testThreadLdctor(test) {
     test.done();
 }
 
+export function testThreadLdfld(test) {
+    this.moduleLoader.loadModule("thread.ldfld");
+    const sub = this.globalMap.givenName("thread.ldfld.main");
+    const thr = new thread.Thread(this.globalMap, this.typeLoader, sub, []);
+    thr.resume();
+    test.strictEqual(thr.evaluationStack.length, 1);
+    test.strictEqual(thr.evaluationStack[0].type.descriptor, "T;");
+    test.done();
+}
+
 export function testThreadLdgbl(test) {
     this.globalMap.registerGlobal("unit", Object.create(this.typeLoader.fromDescriptor("T;").prototype));
     this.moduleLoader.loadModule("thread.ldgbl");
@@ -118,7 +128,7 @@ export function testThreadRet(test) {
     test.done();
 }
 
-export function testThreadStflt(test) {
+export function testThreadStfld(test) {
     this.moduleLoader.loadModule("thread.stfld");
     const sub = this.globalMap.givenName("thread.stfld.main");
     const thr = new thread.Thread(this.globalMap, this.typeLoader, sub, []);

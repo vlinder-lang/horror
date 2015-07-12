@@ -1,0 +1,20 @@
+# 0.0.1
+name: thread.ldfld
+imports: []
+unions: []
+structs: []
+aliases: []
+subs:
+  - name: main
+    parameters: []
+    returnType: 'T;'
+    localCount: 0
+    body:
+      - { opcode: new, type: 'TT;;' }
+      - { opcode: dup }
+      - { opcode: new, type: 'T;' }
+      - { opcode: stfld, type: 'TT;;', field: '0' }
+      - { opcode: ldfld, type: 'TT;;', field: '0' }
+      - { opcode: brk }
+      - { opcode: ret }
+foreignSubs: []

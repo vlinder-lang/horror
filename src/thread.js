@@ -50,6 +50,14 @@ export class Thread {
                     break;
                 }
 
+                case "ldfld": {
+                    const target = this._pop();
+                    const value = target["__" + instruction.field];
+                    this._push(value);
+                    this._relativeJump(1);
+                    break;
+                }
+
                 case "ldgbl": {
                     const value = this._globalMap.givenName(instruction.name);
                     this._push(value);
@@ -81,7 +89,7 @@ export class Thread {
                 case "stfld": {
                     const value = this._pop();
                     const target = this._pop();
-                    target['__' + instruction.field] = value;
+                    target["__" + instruction.field] = value;
                     this._relativeJump(1);
                     break;
                 }
