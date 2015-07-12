@@ -10,7 +10,7 @@ subs:
     returnType: 'T;'
     localCount: 0
     body:
-      - { opcode: ldstr, value: "Hello, world!" }
+      - { opcode: ldstr, value: 'Hello, world!' }
       - { opcode: brk }
       - { opcode: new, type: 'T;' }
       - { opcode: ret }
