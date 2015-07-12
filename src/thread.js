@@ -65,6 +65,12 @@ export class Thread {
                     break;
                 }
 
+                case "pop": {
+                    this._pop();
+                    this._relativeJump(1);
+                    break;
+                }
+
                 case "ret":
                     this.callStack.pop();
                     if (this.callStack.length === 0) {
@@ -73,8 +79,8 @@ export class Thread {
                     break;
 
                 case "stfld": {
-                    const target = this._pop();
                     const value = this._pop();
+                    const target = this._pop();
                     target['__' + instruction.field] = value;
                     this._relativeJump(1);
                     break;
