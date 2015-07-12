@@ -52,7 +52,7 @@ export class Thread {
 
                 case "ldfld": {
                     const target = this._pop();
-                    const value = target["__" + instruction.field];
+                    const value = target.getField(instruction.field);
                     this._push(value);
                     this._relativeJump(1);
                     break;
@@ -97,7 +97,7 @@ export class Thread {
                 case "stfld": {
                     const value = this._pop();
                     const target = this._pop();
-                    target["__" + instruction.field] = value;
+                    target.setField(instruction.field, value);
                     this._relativeJump(1);
                     break;
                 }

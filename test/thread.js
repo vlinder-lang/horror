@@ -146,9 +146,9 @@ export function testThreadStfld(test) {
     thr.resume();
     test.strictEqual(thr.evaluationStack.length, 1);
     test.strictEqual(thr.evaluationStack[0].type.descriptor, "TT;T;T;;");
-    test.strictEqual(thr.evaluationStack[0].__0.type.descriptor, "T;");
-    test.strictEqual(thr.evaluationStack[0].__1.type.descriptor, "T;");
-    test.strictEqual(thr.evaluationStack[0].__2.type.descriptor, "T;");
+    test.strictEqual(thr.evaluationStack[0].getField('0').type.descriptor, "T;");
+    test.strictEqual(thr.evaluationStack[0].getField('1').type.descriptor, "T;");
+    test.strictEqual(thr.evaluationStack[0].getField('2').type.descriptor, "T;");
     test.done();
 }
 

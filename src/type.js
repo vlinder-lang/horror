@@ -20,7 +20,15 @@ export class TupleType extends Type {
     constructor(elementTypes) {
         super();
         this.elementTypes = elementTypes;
-        this.prototype = { type: this };
+        this.prototype = {
+            type: this,
+            getField: function(field) {
+                return this["__" + field];
+            },
+            setField: function(field, value) {
+                this["__" + field] = value;
+            },
+        };
     }
 
     get descriptor() {
@@ -49,7 +57,15 @@ export class StructType extends Type {
         super();
         this.name = name;
         this.fields = fields;
-        this.prototype = { type: this };
+        this.prototype = {
+            type: this,
+            getField: function(field) {
+                return this["__" + field];
+            },
+            setField: function(field, value) {
+                this["__" + field] = value;
+            },
+        };
     }
 
     get descriptor() { return "N" + this.name + ";" }
