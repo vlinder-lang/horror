@@ -80,6 +80,17 @@ export class Thread {
                     break;
                 }
 
+                case "horror.ffiretcall": {
+                    const args = Array(instruction.arguments);
+                    for (let i = args.length - 1; i >= 0; --i) {
+                        args[i] = this._pop();
+                    }
+                    const value = instruction.function.apply(null, args);
+                    this._push(value);
+                    this._relativeJump(1);
+                    break;
+                }
+
                 default:
                     throw new InstructionError();
             }

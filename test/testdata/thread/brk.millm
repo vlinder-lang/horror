@@ -13,3 +13,4 @@ subs:
       - { opcode: brk }
       - { opcode: new, type: 'T;' }
       - { opcode: ret }
+foreignSubs: []

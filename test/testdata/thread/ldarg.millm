@@ -14,3 +14,4 @@ subs:
       - { opcode: ldarg, argument: 0 }
       - { opcode: brk }
       - { opcode: ret }
+foreignSubs: []

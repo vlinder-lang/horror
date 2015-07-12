@@ -12,3 +12,4 @@ subs:
     body:
       - { opcode: new, type: 'T;' }
       - { opcode: ret }
+foreignSubs: []

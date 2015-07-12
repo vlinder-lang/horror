@@ -2,14 +2,20 @@ import * as fs from "fs";
 import * as module from "../src/module";
 import * as thread from "../src/thread";
 import * as type from "../src/type";
+import * as ffiModule from "./testdata/mill/ffi";
 
 export function setUp(callback) {
-    const fetcher = name => {
+    ffiModule.x = null;
+
+    const millModuleFetcher = name => {
         return fs.readFileSync(__dirname + "/testdata/" + name.replace(/\./g, "/") + ".millm", "utf-8");
+    };
+    const ecmascriptModuleFetcher = name => {
+        return require(__dirname + "/testdata/" + name.replace(/\./g, "/"));
     };
     this.globalMap = new module.GlobalMap();
     this.typeLoader = new type.TypeLoader();
-    this.moduleLoader = new module.ModuleLoader(fetcher, this.globalMap, this.typeLoader);
+    this.moduleLoader = new module.ModuleLoader(millModuleFetcher, ecmascriptModuleFetcher, this.globalMap, this.typeLoader);
     callback();
 }
 
@@ -100,5 +106,16 @@ export function testThreadRet(test) {
     const thr = new thread.Thread(this.globalMap, this.typeLoader, sub, []);
     const status = thr.resume();
     test.strictEqual(status, thread.Thread.Status.FINISHED);
+    test.done();
+}
+
+export function testThreadHorror_ffiretcall(test) {
+    this.moduleLoader.loadModule("thread.horror_ffiretcall");
+    const sub = this.globalMap.givenName("thread.horror_ffiretcall.main");
+    const thr = new thread.Thread(this.globalMap, this.typeLoader, sub, []);
+    thr.resume();
+    test.strictEqual(thr.evaluationStack.length, 1);
+    test.strictEqual(thr.evaluationStack[0].type.descriptor, "T;");
+    test.strictEqual(ffiModule.x.type.descriptor, "T;");
     test.done();
 }

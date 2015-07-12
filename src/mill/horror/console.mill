@@ -3,7 +3,7 @@ import mill.log
 import mill.dict
 import mill.text
 
-internal foreign "./console" sub ecmascript.returnCall logToConsole(level: text.String, message: text.String): ()
+internal foreign "mill/horror/console" sub ecmascript.returnCall logToConsole(level: text.String, message: text.String): ()
 
 internal let levelMapping = dict.make(
     (log.Debug, "log"),

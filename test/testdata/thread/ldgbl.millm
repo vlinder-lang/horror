@@ -13,3 +13,4 @@ subs:
       - { opcode: ldgbl, name: unit }
       - { opcode: brk }
       - { opcode: ret }
+foreignSubs: []

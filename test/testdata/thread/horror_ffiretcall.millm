@@ -1,5 +1,5 @@
 # 0.0.1
-name: thread.call
+name: thread.horror_ffiretcall
 imports: []
 unions: []
 structs: []
@@ -10,19 +10,15 @@ subs:
     returnType: 'T;'
     localCount: 0
     body:
-      - { opcode: ldgbl, name: thread.call.sub }
+      - { opcode: ldgbl, name: thread.horror_ffiretcall.idWithSideEffectLOL }
       - { opcode: new, type: 'T;' }
       - { opcode: call, arguments: 1 }
       - { opcode: brk }
       - { opcode: ret }
-  - name: sub
+foreignSubs:
+  - library: 'mill/ffi'
+    callingConvention: returnCall
+    name: idWithSideEffectLOL
     parameters:
-      - name: param
-        type: 'T;'
+      - { name: y, type: 'T;' }
     returnType: 'T;'
-    localCount: 0
-    body:
-      - { opcode: ldarg, argument: 0 }
-      - { opcode: brk }
-      - { opcode: ret }
-foreignSubs: []

@@ -24,3 +24,4 @@ subs:
       - { opcode: ldctor, type: 'Nthread.ldctor.Level;', constructor: Critical }
       - { opcode: brk }
       - { opcode: ret }
+foreignSubs: []

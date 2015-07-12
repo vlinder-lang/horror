@@ -6,3 +6,4 @@ structs: []
 aliases:
   - { name: String, type: S }
 subs: []
+foreignSubs: []

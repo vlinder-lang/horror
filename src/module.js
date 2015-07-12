@@ -22,8 +22,9 @@ export class GlobalMap {
 }
 
 export class ModuleLoader {
-    constructor(fetcher, globalMap, typeLoader) {
-        this._fetcher = fetcher;
+    constructor(millModuleFetcher, ecmascriptModuleFetcher, globalMap, typeLoader) {
+        this._millModuleFetcher = millModuleFetcher;
+        this._ecmascriptModuleFetcher = ecmascriptModuleFetcher;
         this._typeLoader = typeLoader;
         this._globalMap = globalMap;
         this._loadedModuleNames = Object.create(null);
@@ -31,7 +32,7 @@ export class ModuleLoader {
 
     loadModule(name) {
         if (!(name in this._loadedModuleNames)) {
-            const yamlSource = this._fetcher(name);
+            const yamlSource = this._millModuleFetcher(name);
             this._loadModuleFromYAML(name, yamlSource);
             this._loadedModuleNames[name] = true;
         }
@@ -42,7 +43,7 @@ export class ModuleLoader {
         if (yaml.name !== name) {
             throw Error("bad module name");
         }
-        for (let phase of ["imports", "structs", "unions", "aliases", "subs"]) {
+        for (let phase of ["imports", "structs", "unions", "aliases", "subs", "foreignSubs"]) {
             this["_load" + phase[0].toUpperCase() + phase.slice(1) + "FromYAML"](name, yaml);
         }
     }
@@ -102,6 +103,32 @@ export class ModuleLoader {
             sub.localCount = yamlSub.localCount;
             sub.body = yamlSub.body;
             this._globalMap.registerGlobal(sub.name, sub);
+        }
+    }
+
+    _loadForeignSubsFromYAML(name, yaml) {
+        for (let yamlForeignSub of yaml.foreignSubs) {
+            if (yamlForeignSub.callingConvention !== "returnCall") {
+                throw Error("not implemented");
+            }
+            const ecmascriptModule = this._ecmascriptModuleFetcher(yamlForeignSub.library);
+            const yamlSub = {
+                name: yamlForeignSub.name,
+                parameters: yamlForeignSub.parameters,
+                returnType: yamlForeignSub.returnType,
+                localCount: 0,
+                body: [],
+            };
+            for (let i = 0; i < yamlSub.parameters.length; ++i) {
+                yamlSub.body.push({ opcode: "ldarg", argument: i });
+            }
+            yamlSub.body.push({
+                opcode: "horror.ffiretcall",
+                function: ecmascriptModule[yamlSub.name],
+                arguments: yamlSub.parameters.length,
+            });
+            yamlSub.body.push({ opcode: "ret" });
+            this._loadSubsFromYAML(name, { subs: [yamlSub] });
         }
     }
 }
