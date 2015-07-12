@@ -65,6 +65,14 @@ export class Thread {
                     break;
                 }
 
+                case "ldstr": {
+                    const value = Object.create(this._typeLoader.fromDescriptor("S").prototype);
+                    value.value = instruction.value;
+                    this._push(value);
+                    this._relativeJump(1);
+                    break;
+                }
+
                 case "new": {
                     const type = this._typeLoader.fromDescriptor(instruction.type);
                     const value = Object.create(type.prototype);

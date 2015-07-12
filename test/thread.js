@@ -100,6 +100,17 @@ export function testThreadLdgbl(test) {
     test.done();
 }
 
+export function testThreadLdstr(test) {
+    this.moduleLoader.loadModule("thread.ldstr");
+    const sub = this.globalMap.givenName("thread.ldstr.main");
+    const thr = new thread.Thread(this.globalMap, this.typeLoader, sub, []);
+    thr.resume();
+    test.strictEqual(thr.evaluationStack.length, 1);
+    test.strictEqual(thr.evaluationStack[0].type.descriptor, "S");
+    test.strictEqual(thr.evaluationStack[0].value, "Hello, world!");
+    test.done();
+}
+
 export function testThreadNew(test) {
     this.moduleLoader.loadModule("thread.new");
     const sub = this.globalMap.givenName("thread.new.main");
