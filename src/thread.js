@@ -97,6 +97,7 @@ export class Thread {
                     const value = this._pop();
                     const target = this._pop();
                     target.setField(instruction.field, value);
+                    this._push(target);
                     this._relativeJump(1);
                     break;
                 }

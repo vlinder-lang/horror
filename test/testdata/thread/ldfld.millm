@@ -11,7 +11,6 @@ subs:
     localCount: 0
     body:
       - { opcode: new, type: 'TT;;' }
-      - { opcode: dup }
       - { opcode: new, type: 'T;' }
       - { opcode: stfld, type: 'TT;;', field: '0' }
       - { opcode: ldfld, type: 'TT;;', field: '0' }
