@@ -59,5 +59,7 @@ export function testModuleLoaderLoadModule(test) {
     test.deepEqual(idWithSideEffectLOLSub.parameterNames, ["y"]);
     test.strictEqual(idWithSideEffectLOLSub.localCount, 0);
 
+    moduleLoader.loadModule("main");
+
     test.done();
 }
