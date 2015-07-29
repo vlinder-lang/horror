@@ -1,4 +1,9 @@
-export class TypeNotFoundError extends Error { }
+export class TypeNotFoundError extends Error {
+    constructor(name) {
+        super();
+        this.message = name;
+    }
+}
 export class TypeDescriptorError extends Error { }
 
 export class Type {
@@ -169,7 +174,7 @@ export class TypeLoader {
                 const semicolonIndex = descriptor.indexOf(";");
                 const name = descriptor.slice(1, semicolonIndex);
                 if (!(name in this._namedTypes)) {
-                    throw new TypeNotFoundError();
+                    throw new TypeNotFoundError(name);
                 }
                 const type = this._namedTypes[name];
                 return [type, descriptor.slice(semicolonIndex + 1)];
