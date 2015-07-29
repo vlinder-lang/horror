@@ -1,0 +1,19 @@
+# 0.0.1
+name: thread.ldloc_stloc
+imports: []
+unions: []
+structs: []
+aliases: []
+subs:
+  - name: main
+    parameters: []
+    returnType: 'T;'
+    localCount: 1
+    body:
+      - { opcode: new, type: 'T;' }
+      - { opcode: stloc, index: 0 }
+      - { opcode: brk }
+      - { opcode: ldloc, index: 0 }
+      - { opcode: brk }
+      - { opcode: ret }
+foreignSubs: []

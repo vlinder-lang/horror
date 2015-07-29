@@ -65,6 +65,13 @@ export class Thread {
                     break;
                 }
 
+                case "ldloc": {
+                    const value = this._topStackFrame().locals[instruction.index];
+                    this._push(value);
+                    this._relativeJump(1);
+                    break;
+                }
+
                 case "ldstr": {
                     const value = this._typeLoader.fromDescriptor("S").new(instruction.value);
                     this._push(value);
@@ -98,6 +105,13 @@ export class Thread {
                     const target = this._pop();
                     target.setField(instruction.field, value);
                     this._push(target);
+                    this._relativeJump(1);
+                    break;
+                }
+
+                case "stloc": {
+                    const value = this._pop();
+                    this._topStackFrame().locals[instruction.index] = value;
                     this._relativeJump(1);
                     break;
                 }
@@ -150,7 +164,7 @@ Thread.Status = {
 Thread.StackFrame = class {
     constructor(sub, args) {
         this.arguments = args;
-        this.locals = [];
+        this.locals = Array(sub.localCount);
         this.code = sub.body;
         this.programCounter = 0;
     }

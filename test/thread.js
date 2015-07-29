@@ -100,6 +100,20 @@ export function testThreadLdgbl(test) {
     test.done();
 }
 
+export function testThreadLdlocStloc(test) {
+    this.moduleLoader.loadModule("thread.ldloc_stloc");
+    const sub = this.globalMap.givenName("thread.ldloc_stloc.main");
+    const thr = new thread.Thread(this.globalMap, this.typeLoader, sub, []);
+    thr.resume();
+    test.strictEqual(thr.callStack[0].locals[0].type.descriptor, "T;");
+    test.strictEqual(thr.evaluationStack.length, 0);
+    thr.resume();
+    test.strictEqual(thr.callStack[0].locals[0].type.descriptor, "T;");
+    test.strictEqual(thr.evaluationStack.length, 1);
+    test.strictEqual(thr.evaluationStack[0].type.descriptor, "T;");
+    test.done();
+}
+
 export function testThreadLdstr(test) {
     this.moduleLoader.loadModule("thread.ldstr");
     const sub = this.globalMap.givenName("thread.ldstr.main");
