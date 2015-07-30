@@ -77,6 +77,9 @@ export class ModuleLoader {
             };
             const union = new type.UnionType(name + "." + yamlUnion.name, constructors);
             this._typeLoader.registerNamedType(union.name, union);
+            for (let constructorName in union.constructors) {
+                this._globalMap.registerGlobal(name + "." + constructorName, union.constructors[constructorName]);
+            };
         }
     }
 

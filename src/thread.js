@@ -42,14 +42,6 @@ export class Thread {
                     break;
                 }
 
-                case "ldctor": {
-                    const type = this._typeLoader.fromDescriptor(instruction.type);
-                    const value = type.constructors[instruction.constructor];
-                    this._push(value);
-                    this._relativeJump(1);
-                    break;
-                }
-
                 case "ldfld": {
                     const target = this._pop();
                     const value = target.getField(instruction.field);

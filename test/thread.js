@@ -67,18 +67,6 @@ export function testThreadLdarg(test) {
     test.done();
 }
 
-export function testThreadLdctor(test) {
-    this.moduleLoader.loadModule("thread.ldctor");
-    const sub = this.globalMap.givenName("thread.ldctor.main");
-    const thr = new thread.Thread(this.globalMap, this.typeLoader, sub);
-    thr.resume();
-    test.strictEqual(thr.evaluationStack.length, 5);
-    for (let element of thr.evaluationStack) {
-        test.strictEqual(element.type.descriptor, 'Nthread.ldctor.Level;');
-    }
-    test.done();
-}
-
 export function testThreadLdfld(test) {
     this.moduleLoader.loadModule("thread.ldfld");
     const sub = this.globalMap.givenName("thread.ldfld.main");
