@@ -1,0 +1,26 @@
+# 0.0.1
+name: thread.tailcall
+imports: []
+unions: []
+structs: []
+aliases: []
+subs:
+  - name: main
+    parameters: []
+    returnType: 'T;'
+    localCount: 0
+    body:
+      - { opcode: ldgbl, name: thread.tailcall.sub }
+      - { opcode: new, type: 'T;' }
+      - { opcode: tailcall, arguments: 1 }
+  - name: sub
+    parameters:
+      - name: param
+        type: 'T;'
+    returnType: 'T;'
+    localCount: 0
+    body:
+      - { opcode: ldarg, argument: 0 }
+      - { opcode: brk }
+      - { opcode: ret }
+foreignSubs: []

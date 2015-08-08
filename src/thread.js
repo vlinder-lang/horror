@@ -108,6 +108,17 @@ export class Thread {
                     break;
                 }
 
+                case "tailcall": {
+                    const args = Array(instruction.arguments);
+                    for (let i = args.length - 1; i >= 0; --i) {
+                        args[i] = this._pop();
+                    }
+                    const sub = this._pop();
+                    this.callStack.pop();
+                    this.callStack.push(new Thread.StackFrame(sub, args));
+                    break;
+                }
+
                 case "horror.ffiretcall": {
                     const args = Array(instruction.arguments);
                     for (let i = args.length - 1; i >= 0; --i) {

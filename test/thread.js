@@ -154,6 +154,19 @@ export function testThreadStfld(test) {
     test.done();
 }
 
+export function testThreadTailcall(test) {
+    this.moduleLoader.loadModule("thread.tailcall");
+    const sub = this.globalMap.givenName("thread.tailcall.main");
+    const thr = new thread.Thread(this.globalMap, this.typeLoader, sub, []);
+
+    thr.resume();
+    test.strictEqual(thr.callStack.length, 1);
+    test.strictEqual(thr.evaluationStack.length, 1);
+    test.strictEqual(thr.evaluationStack[0].type.descriptor, "T;");
+    test.strictEqual(thr.resume(), thread.Thread.Status.FINISHED);
+    test.done();
+}
+
 export function testThreadHorror_ffiretcall(test) {
     this.moduleLoader.loadModule("thread.horror_ffiretcall");
     const sub = this.globalMap.givenName("thread.horror_ffiretcall.main");
