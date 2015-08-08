@@ -18,6 +18,8 @@ const moduleLoader = new module.ModuleLoader(
     typeLoader
 );
 
+
+moduleLoader.loadModule("mill.log");
 moduleLoader.loadModule("main");
 const main = globalMap.givenName("main.main");
 const logger =
