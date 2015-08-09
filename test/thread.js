@@ -167,6 +167,20 @@ export function testThreadTailcall(test) {
     test.done();
 }
 
+export function testThreadHorror_fficontcall(test) {
+    this.moduleLoader.loadModule("thread.horror_fficontcall");
+    const sub = this.globalMap.givenName("thread.horror_fficontcall.main");
+    const thr = new thread.Thread(this.globalMap, this.typeLoader, sub, []);
+    test.strictEqual(thr.resume(), thread.Thread.Status.PAUSED);
+    setTimeout(function() {
+        thr.resume();
+        test.strictEqual(thr.evaluationStack.length, 1);
+        test.strictEqual(thr.evaluationStack[0].type.descriptor, "T;");
+        test.strictEqual(ffiModule.y.type.descriptor, "T;");
+        test.done();
+    }, 20);
+}
+
 export function testThreadHorror_ffiretcall(test) {
     this.moduleLoader.loadModule("thread.horror_ffiretcall");
     const sub = this.globalMap.givenName("thread.horror_ffiretcall.main");

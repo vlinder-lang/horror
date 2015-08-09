@@ -119,6 +119,20 @@ export class Thread {
                     break;
                 }
 
+                case "horror.fficontcall": {
+                    const args = Array(instruction.arguments + 1);
+                    for (let i = args.length - 2; i >= 0; --i) {
+                        args[i] = this._pop();
+                    }
+                    args[args.length - 1] = value => {
+                        this._push(value);
+                        this._relativeJump(1);
+                        this.resume();
+                    };
+                    instruction.function.apply(null, args);
+                    return Thread.Status.PAUSED;
+                }
+
                 case "horror.ffiretcall": {
                     const args = Array(instruction.arguments);
                     for (let i = args.length - 1; i >= 0; --i) {

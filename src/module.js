@@ -112,9 +112,6 @@ export class ModuleLoader {
 
     _loadForeignSubsFromYAML(name, yaml) {
         for (let yamlForeignSub of yaml.foreignSubs) {
-            if (yamlForeignSub.callingConvention !== "returnCall") {
-                throw Error("not implemented");
-            }
             const ecmascriptModule = this._ecmascriptModuleFetcher(yamlForeignSub.library);
             const yamlSub = {
                 name: yamlForeignSub.name,
@@ -127,7 +124,10 @@ export class ModuleLoader {
                 yamlSub.body.push({ opcode: "ldarg", argument: i });
             }
             yamlSub.body.push({
-                opcode: "horror.ffiretcall",
+                opcode: {
+                    continuationCall: "horror.fficontcall",
+                    returnCall: "horror.ffiretcall",
+                }[yamlForeignSub.callingConvention],
                 function: ecmascriptModule[yamlSub.name],
                 arguments: yamlSub.parameters.length,
             });
