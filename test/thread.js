@@ -2,20 +2,20 @@ import * as fs from "fs";
 import * as module from "../src/module";
 import * as thread from "../src/thread";
 import * as type from "../src/type";
-import * as ffiModule from "./testdata/mill/ffi";
+import * as ffiModule from "./testdata/vlinder/ffi";
 
 export function setUp(callback) {
     ffiModule.x = null;
 
-    const millModuleFetcher = name => {
-        return fs.readFileSync(__dirname + "/testdata/" + name.replace(/\./g, "/") + ".millm", "utf-8");
+    const vlinderModuleFetcher = name => {
+        return fs.readFileSync(__dirname + "/testdata/" + name.replace(/\./g, "/") + ".vlm", "utf-8");
     };
     const ecmascriptModuleFetcher = name => {
         return require(__dirname + "/testdata/" + name.replace(/\./g, "/"));
     };
     this.globalMap = new module.GlobalMap();
     this.typeLoader = new type.TypeLoader();
-    this.moduleLoader = new module.ModuleLoader(millModuleFetcher, ecmascriptModuleFetcher, this.globalMap, this.typeLoader);
+    this.moduleLoader = new module.ModuleLoader(vlinderModuleFetcher, ecmascriptModuleFetcher, this.globalMap, this.typeLoader);
     callback();
 }
 

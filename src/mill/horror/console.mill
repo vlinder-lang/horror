@@ -1,9 +1,9 @@
-import mill.foreign.ecmascript
-import mill.log
-import mill.dict
-import mill.text
+import vlinder.foreign.ecmascript
+import vlinder.log
+import vlinder.dict
+import vlinder.text
 
-internal foreign "mill/horror/console" sub ecmascript.returnCall logToConsole(level: text.String, message: text.String): ()
+internal foreign "vlinder/horror/console" sub ecmascript.returnCall logToConsole(level: text.String, message: text.String): ()
 
 internal let levelMapping = dict.make(
     (log.Debug, "log"),

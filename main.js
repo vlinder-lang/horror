@@ -3,8 +3,8 @@ import * as module from "./src/module";
 import * as thread from "./src/thread";
 import * as type from "./src/type";
 
-const millModuleFetcher = name => {
-    return fs.readFileSync(process.argv[2] + "/" + name + ".millm");
+const vlinderModuleFetcher = name => {
+    return fs.readFileSync(process.argv[2] + "/" + name + ".vlm");
 };
 const ecmascriptModuleFetcher = name => {
     return require(process.argv[2] + "/" + name);
@@ -12,18 +12,18 @@ const ecmascriptModuleFetcher = name => {
 const globalMap = new module.GlobalMap();
 const typeLoader = new type.TypeLoader();
 const moduleLoader = new module.ModuleLoader(
-    millModuleFetcher,
+    vlinderModuleFetcher,
     ecmascriptModuleFetcher,
     globalMap,
     typeLoader
 );
 
 
-moduleLoader.loadModule("mill.log");
+moduleLoader.loadModule("vlinder.log");
 moduleLoader.loadModule("main");
 const main = globalMap.givenName("main.main");
 const logger =
-    typeLoader.fromDescriptor("FNmill.log.Record;T;;")
+    typeLoader.fromDescriptor("FNvlinder.log.Record;T;;")
     .new("console", ["logger"], 0, [
         { opcode: "ldarg", argument: 0 },
         {

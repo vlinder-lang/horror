@@ -16,7 +16,7 @@ subs:
       - { opcode: brk }
       - { opcode: ret }
 foreignSubs:
-  - library: 'mill/ffi'
+  - library: 'vlinder/ffi'
     callingConvention: continuationCall
     name: sleep
     parameters:

@@ -1,5 +1,5 @@
 # 0.0.1
-name: mill.ffi
+name: vlinder.ffi
 imports: []
 unions: []
 structs: []
@@ -7,21 +7,21 @@ aliases: []
 subs:
   - name: info
     parameters:
-      - { name: logger, type: 'Nmill.log.Logger;' }
+      - { name: logger, type: 'Nvlinder.log.Logger;' }
       - { name: message, type: 'S' }
     returnType: 'T;'
     localCount: 0
     body:
       - { opcode: ldarg, argument: 0 }
-      - { opcode: new, type: 'Nmill.log.Record;' }
-      - { opcode: ldgbl, name: 'mill.log.Info' }
-      - { opcode: stfld, type: 'Nmill.log.Record;', field: level }
+      - { opcode: new, type: 'Nvlinder.log.Record;' }
+      - { opcode: ldgbl, name: 'vlinder.log.Info' }
+      - { opcode: stfld, type: 'Nvlinder.log.Record;', field: level }
       - { opcode: ldarg, argument: 1 }
-      - { opcode: stfld, type: 'Nmill.log.Record;', field: message }
+      - { opcode: stfld, type: 'Nvlinder.log.Record;', field: message }
       - { opcode: call, arguments: 1 }
       - { opcode: ret }
 foreignSubs:
-  - library: 'mill/ffi'
+  - library: 'vlinder/ffi'
     callingConvention: returnCall
     name: idWithSideEffectLOL
     parameters:

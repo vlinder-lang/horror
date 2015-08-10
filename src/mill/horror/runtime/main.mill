@@ -1,5 +1,5 @@
-import mill.dict
-import mill.horror.console
+import vlinder.dict
+import vlinder.horror.console
 
 let mainArguments = dict.make(
     ("console", console.console),

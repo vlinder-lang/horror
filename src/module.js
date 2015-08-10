@@ -22,8 +22,8 @@ export class GlobalMap {
 }
 
 export class ModuleLoader {
-    constructor(millModuleFetcher, ecmascriptModuleFetcher, globalMap, typeLoader) {
-        this._millModuleFetcher = millModuleFetcher;
+    constructor(vlinderModuleFetcher, ecmascriptModuleFetcher, globalMap, typeLoader) {
+        this._vlinderModuleFetcher = vlinderModuleFetcher;
         this._ecmascriptModuleFetcher = ecmascriptModuleFetcher;
         this._typeLoader = typeLoader;
         this._globalMap = globalMap;
@@ -32,7 +32,7 @@ export class ModuleLoader {
 
     loadModule(name) {
         if (!(name in this._loadedModuleNames)) {
-            const yamlSource = this._millModuleFetcher(name);
+            const yamlSource = this._vlinderModuleFetcher(name);
             this._loadModuleFromYAML(name, yamlSource);
             this._loadedModuleNames[name] = true;
         }

@@ -3,8 +3,8 @@ import * as type from "../src/type";
 export function testTypeLoaderFromDescriptor(test) {
     const typeLoader = new type.TypeLoader();
 
-    const recordType = new type.StructType("mill.log.Record", []);
-    typeLoader.registerNamedType("mill.log.Record", recordType);
+    const recordType = new type.StructType("vlinder.log.Record", []);
+    typeLoader.registerNamedType("vlinder.log.Record", recordType);
 
     {
         const stringType = typeLoader.fromDescriptor("S");
@@ -27,7 +27,7 @@ export function testTypeLoaderFromDescriptor(test) {
     }
 
     {
-        const namedType = typeLoader.fromDescriptor("Nmill.log.Record;");
+        const namedType = typeLoader.fromDescriptor("Nvlinder.log.Record;");
         test.strictEqual(namedType, recordType);
     }
 

@@ -1,2 +1,2 @@
 # horror
-Mill VM in JavaScript.
+Vlinder VM in JavaScript.
